@@ -42,6 +42,11 @@ MarkDiagonallyInverseSafe(Bitmap bitmap, int count, Color color)
 
 ## Version History
 
+* 1.0.0-alpha.1
+	* Filling some method's summaries.
+	* Adding some comments.
+	* Using explicit variable instead of using var.
+
 * 1.0.0-alpha
 	* Initial version.
 
