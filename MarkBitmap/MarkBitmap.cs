@@ -9,39 +9,51 @@ namespace MarkBitmap
     [SupportedOSPlatform("windows")]
     public partial class MarkBitmap
     {
-        private static byte[] ToBuffer(Bitmap bmp)
+        /// <summary>
+        /// Transforming bitmap data into byte array.
+        /// </summary>
+        /// <param name="bitmap">Specified bitmap.</param>
+        /// <returns>Byte array whose filled with bitmap's color data.</returns>
+        private static byte[] ToBuffer(Bitmap bitmap)
         {
-            // Creating a buffer
-            byte[] buffer = new byte[bmp.Width * bmp.Height * 3];
+            // Creating a buffer width length of each pixels and its three component's length.
+            byte[] buffer = new byte[bitmap.Width * bitmap.Height * 3];
 
-            //
-            BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
+            // Creating a BitmapData. (ReadOnly)
+            BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
 
-            //
+            // Coping data from buffer into BitmapData with buffer length.
             Marshal.Copy(buffer, 0, bmpData.Scan0, buffer.Length);
 
-            //
-            bmp.UnlockBits(bmpData);
+            // Unlocking bitmaps.
+            bitmap.UnlockBits(bmpData);
 
-            //
+            // Returning buffer.
             return buffer;
         }
 
+        /// <summary>
+        /// Transforming byte array data into a bitmap. 
+        /// </summary>
+        /// <param name="buffer">Specified buffer whose consists RGB color data in byte array.</param>
+        /// <param name="width">Specified width whose will be bitmap's width.</param>
+        /// <param name="height">Specified height whose will be bitmap's height.</param>
+        /// <returns>Bitmap</returns>
         private static Bitmap ToBMP(byte[] buffer, int width, int height)
         {
-            //
+            // Creating a bitmap with given width, height and specified pixel format.
             Bitmap bitmap = new Bitmap(width: width, height: height, PixelFormat.Format24bppRgb);
 
-            //
+            // Creating a BitmapData. (WriteOnly)
             BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, width: width, height: height), ImageLockMode.WriteOnly, bitmap.PixelFormat);
 
-            //
+            // Copying data from BitmapData into buffer with buffer length.
             Marshal.Copy(buffer, 0, bmpData.Scan0, buffer.Length);
 
-            //
+            // Unlocking bitmaps.
             bitmap.UnlockBits(bmpData);
 
-            //
+            // Returning buffer.
             return bitmap;
         }
     }
@@ -138,7 +150,7 @@ namespace MarkBitmap
     [SupportedOSPlatform("windows")]
     public partial class MarkBitmap
     {
-        //
+        // Default null message if bitmap is not specified.
         private readonly static string messageBitmapNull = "Bitmap is null";
 
         /// <summary>
@@ -151,14 +163,14 @@ namespace MarkBitmap
         /// <exception cref="ArgumentNullException"></exception>
         public static Bitmap MarkHorizontally(Bitmap bitmap, int count, Color color)
         {
-            // Null control
+            // Checking if bitmap is null.
             if (bitmap == null)
             {
-                //
+                // Throwing an ArgumentNullException with specified message.
                 throw new ArgumentNullException(messageBitmapNull);
             }
 
-            //
+            // TODO: Parse methods.
             return ToBMP(MarkHorizontally(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
         }
 
@@ -171,7 +183,7 @@ namespace MarkBitmap
         /// <returns></returns>
         public static Bitmap MarkHorizontallyUnsafe(Bitmap bitmap, int count, Color color)
         {
-            //
+            // TODO: Parse methods.
             return ToBMP(MarkHorizontally(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
         }
 
@@ -185,14 +197,14 @@ namespace MarkBitmap
         /// <exception cref="ArgumentNullException"></exception>
         public static Bitmap MarkVertically(Bitmap bitmap, int count, Color color)
         {
-            // Null control
+            // Checking if bitmap is null.
             if (bitmap == null)
             {
-                //
+                // Throwing an ArgumentNullException with specified message.
                 throw new ArgumentNullException(messageBitmapNull);
             }
 
-            //
+            // TODO: Parse methods.
             return ToBMP(MarkVertically(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
         }
 
@@ -205,7 +217,7 @@ namespace MarkBitmap
         /// <returns></returns>
         public static Bitmap MarkVerticallyUnsafe(Bitmap bitmap, int count, Color color)
         {
-            //
+            // TODO: Parse methods.
             return ToBMP(MarkVertically(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
         }
 
@@ -219,14 +231,14 @@ namespace MarkBitmap
         /// <exception cref="ArgumentNullException"></exception>
         public static Bitmap MarkDiagonally(Bitmap bitmap, int count, Color color)
         {
-            //
+            // Checking if bitmap is null.
             if (bitmap == null)
             {
-                //
+                // Throwing an ArgumentNullException with specified message.
                 throw new ArgumentNullException(messageBitmapNull);
             }
 
-            //
+            // TODO: Parse methods.
             return ToBMP(MarkDiagonally(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
         }
 
@@ -239,7 +251,7 @@ namespace MarkBitmap
         /// <returns></returns>
         public static Bitmap MarkDiagonallyUnsafe(Bitmap bitmap, int count, Color color)
         {
-            //
+            // TODO: Parse methods.
             return ToBMP(MarkDiagonally(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
         }
 
@@ -253,14 +265,14 @@ namespace MarkBitmap
         /// <exception cref="ArgumentNullException"></exception>
         public static Bitmap MarkDiagonallyInverse(Bitmap bitmap, int count, Color color)
         {
-            //
+            // Checking if bitmap is null.
             if (bitmap == null)
             {
-                //
+                // Throwing an ArgumentNullException with specified message.
                 throw new ArgumentNullException(messageBitmapNull);
             }
 
-            //
+            // TODO: Parse methods.
             return ToBMP(MarkDiagonallyInverse(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
         }
 
@@ -273,7 +285,7 @@ namespace MarkBitmap
         /// <returns></returns>
         public static Bitmap MarkDiagonallyInverseUnsafe(Bitmap bitmap, int count, Color color)
         {
-            //
+            // TODO: Parse methods.
             return ToBMP(MarkDiagonallyInverse(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
         }
 
@@ -293,27 +305,27 @@ namespace MarkBitmap
         /// <exception cref="ArgumentNullException"></exception>
         public static Bitmap MarkEightArmedCross(Bitmap bitmap, int divideCountHeight, int divideCountWidth, int divideCountDiagonal, int divideCountDiagonalInverse, Color colorHeight, Color colorWidth, Color colorDiagonal, Color colorDiagonalInverse)
         {
-            // Null Check
+            // Checking if bitmap is null.
             if (bitmap == null)
             {
-                //
+                // Throwing an ArgumentNullException with specified message.
                 throw new ArgumentNullException(messageBitmapNull);
             }
 
             //
-            var buffer = ToBuffer(bitmap);
+            byte[] buffer = ToBuffer(bitmap);
 
             //
-            var horizontallyMarked = MarkHorizontally(buffer, count: divideCountHeight, width: bitmap.Width, height: bitmap.Height, color: colorWidth);
+            byte[] horizontallyMarked = MarkHorizontally(buffer, count: divideCountHeight, width: bitmap.Width, height: bitmap.Height, color: colorWidth);
 
             //
-            var verticallyMarked = MarkVertically(horizontallyMarked, count: divideCountWidth, width: bitmap.Width, height: bitmap.Height, color: colorHeight);
+            byte[] verticallyMarked = MarkVertically(horizontallyMarked, count: divideCountWidth, width: bitmap.Width, height: bitmap.Height, color: colorHeight);
 
             //
-            var diagonallyMarked = MarkDiagonally(verticallyMarked, count: divideCountDiagonal, width: bitmap.Width, height: bitmap.Height, color: colorDiagonal);
+            byte[] diagonallyMarked = MarkDiagonally(verticallyMarked, count: divideCountDiagonal, width: bitmap.Width, height: bitmap.Height, color: colorDiagonal);
 
             //
-            var diagonallyInverseMarked = MarkDiagonallyInverse(diagonallyMarked, count: divideCountDiagonalInverse, width: bitmap.Width, height: bitmap.Height, color: colorDiagonalInverse);
+            byte[] diagonallyInverseMarked = MarkDiagonallyInverse(diagonallyMarked, count: divideCountDiagonalInverse, width: bitmap.Width, height: bitmap.Height, color: colorDiagonalInverse);
 
             //
             var bmp = ToBMP(diagonallyInverseMarked, width: bitmap.Width, height: bitmap.Height);
@@ -338,19 +350,19 @@ namespace MarkBitmap
         public static Bitmap MarkEightArmedCrossUnsafe(Bitmap bitmap, int divideCountHeight, int divideCountWidth, int divideCountDiagonal, int divideCountDiagonalInverse, Color colorHeight, Color colorWidth, Color colorDiagonal, Color colorDiagonalInverse)
         {
             //
-            var buffer = ToBuffer(bitmap);
+            byte[] buffer = ToBuffer(bitmap);
 
             //
-            var horizontallyMarked = MarkHorizontally(buffer, count: divideCountHeight, width: bitmap.Width, height: bitmap.Height, color: colorWidth);
+            byte[] horizontallyMarked = MarkHorizontally(buffer, count: divideCountHeight, width: bitmap.Width, height: bitmap.Height, color: colorWidth);
 
             //
-            var verticallyMarked = MarkVertically(horizontallyMarked, count: divideCountWidth, width: bitmap.Width, height: bitmap.Height, color: colorHeight);
+            byte[] verticallyMarked = MarkVertically(horizontallyMarked, count: divideCountWidth, width: bitmap.Width, height: bitmap.Height, color: colorHeight);
 
             //
-            var diagonallyMarked = MarkDiagonally(verticallyMarked, count: divideCountDiagonal, width: bitmap.Width, height: bitmap.Height, color: colorDiagonal);
+            byte[] diagonallyMarked = MarkDiagonally(verticallyMarked, count: divideCountDiagonal, width: bitmap.Width, height: bitmap.Height, color: colorDiagonal);
 
             //
-            var diagonallyInverseMarked = MarkDiagonallyInverse(diagonallyMarked, count: divideCountDiagonalInverse, width: bitmap.Width, height: bitmap.Height, color: colorDiagonalInverse);
+            byte[] diagonallyInverseMarked = MarkDiagonallyInverse(diagonallyMarked, count: divideCountDiagonalInverse, width: bitmap.Width, height: bitmap.Height, color: colorDiagonalInverse);
 
             //
             Bitmap bmp = ToBMP(diagonallyInverseMarked, width: bitmap.Width, height: bitmap.Height);
@@ -420,13 +432,13 @@ namespace MarkBitmap
         /// </summary>
         /// <param name="bitmap"></param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException">Throws if bitmap is null.</exception>
         public static Bitmap MarkBitmapInternal(Bitmap bitmap)
         {
             // Checking if bitmap is null.
             if (bitmap == null)
             {
-                //
+                // Throwing an ArgumentNullException with specified message.
                 throw new ArgumentNullException(messageBitmapNull);
             }
 
@@ -436,6 +448,7 @@ namespace MarkBitmap
                 //
                 for (int j = 0; j < bitmap.Height; j++)
                 {
+                    //
                     bitmap.SetPixel(bitmap.Width / 4 * i, j, Color.White);
                 }
             }
@@ -446,6 +459,7 @@ namespace MarkBitmap
                 //
                 for (int j = 0; j < bitmap.Width; j++)
                 {
+                    //
                     bitmap.SetPixel(j, bitmap.Height / 4 * i, Color.White);
                 }
             }

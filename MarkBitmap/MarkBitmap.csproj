@@ -6,13 +6,16 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Marking Bitmap files with different geometric shapes.</Title>
-    <Version>1.0.0-alpha</Version>
+    <Version>1.0.0-alpha.1</Version>
     <Authors>Enes Okullu</Authors>
     <Company>Enes Okullu</Company>
     <Description>MarkBitmap offers multiple geometric shape applier.</Description>
     <Copyright>Enes Okullu</Copyright>
     <PackageTags>Mark; Marking; Bitmap</PackageTags>
-    <PackageReleaseNotes>Initial version, alpha version do not use.</PackageReleaseNotes>
+    <PackageReleaseNotes>v1.0.0-alpha.1
+- Filling some method's summaries.
+- Adding some comments.
+- Using explicit variable instead of using var.</PackageReleaseNotes>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
     <PackageReadmeFile>README.md</PackageReadmeFile>
