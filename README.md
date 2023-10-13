@@ -1,14 +1,16 @@
-# MarkBitmap
+## MarkBitmap
 
 MarkBitmap is a project to mark the images with geometric shapes. Alpha version. Do not use.
 
 ![MarkBitmap](https://repository-images.githubusercontent.com/699370948/461829ee-3302-4060-b620-6b04285cc71e)
 
-## Description
+[Download on NuGet gallery](https://www.nuget.org/packages/MarkBitmap/)
+
+### Description
 
 MarkBitmap will consist different geometric shaped and more to mark bitmap files easily.
 
-## Listed Methods
+### Example Usage
 
 ### byte[] to byte[]
 ```
@@ -38,27 +40,18 @@ MarkDiagonallySafe(Bitmap bitmap, int count, Color color)
 MarkDiagonallyInverseSafe(Bitmap bitmap, int count, Color color)
 ```
 
-### Output
+### Version History
+See changelog [MarkBitmap changelog](https://github.com/meokullu/MarkBitmap/blob/master/CHANGELOG.md)
 
-## Version History
-
-* 1.0.0-alpha.1
-	* Filling some method's summaries.
-	* Adding some comments.
-	* Using explicit variable instead of using var.
-
-* 1.0.0-alpha
-	* Initial version.
-
-## Task List
+### Task List
 - [ ] MarkHorizontally, MarkVertically, MarkDiagonally, MarkDiagonally methods.
 - [ ] Fill summaries of methods.
 
-## Licence
+### Licence
 [MIT license](https://github.com/meokullu/MarkBitmap/blob/master/LICENSE)
 
-## Authors
+### Authors
 Twitter: Enes Okullu [@enesokullu](https://twitter.com/EnesOkullu)
 
-## Help
+### Help
 Twitter: Enes Okullu [@enesokullu](https://twitter.com/EnesOkullu)
