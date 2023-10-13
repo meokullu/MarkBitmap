@@ -12,10 +12,9 @@
     <Description>MarkBitmap offers multiple geometric shape applier.</Description>
     <Copyright>Enes Okullu</Copyright>
     <PackageTags>Mark; Marking; Bitmap</PackageTags>
-    <PackageReleaseNotes>v1.0.0-alpha.1
-- Filling some method's summaries.
-- Adding some comments.
-- Using explicit variable instead of using var.</PackageReleaseNotes>
+    <PackageReleaseNotes>v1.0.0-alpha.2 Preparing for Nuget refresh.
+
+    </PackageReleaseNotes>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
     <PackageReadmeFile>README.md</PackageReadmeFile>
