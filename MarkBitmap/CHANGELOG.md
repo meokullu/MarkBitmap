@@ -1,5 +1,6 @@
-# Changelog
+## MarkBitmap Changelog
 
+<!--
 ## [Unreleased]
 
 ### Added
@@ -7,6 +8,7 @@
 ### Changed
 
 ### Removed
+-->
 
 ## [1.0.0-alpha.2]
 
@@ -21,7 +23,7 @@
 * Adding some comments.
 
 ### Changed
-* Using explicit variable instead of var.
+* Using explicit variable instead of `var`.
 
 ## [1.0.0-alpha]
 * Initial version.

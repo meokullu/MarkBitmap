@@ -12,8 +12,9 @@
     <Description>MarkBitmap offers multiple geometric shape applier.</Description>
     <Copyright>Enes Okullu</Copyright>
     <PackageTags>Mark; Marking; Bitmap</PackageTags>
-    <PackageReleaseNotes>v1.0.0-alpha.2 Preparing for Nuget refresh.
-
+    <PackageReleaseNotes>
+      v1.0.0-alpha.2 Preparing for Nuget refresh.
+      See changelog (https://github.com/meokullu/GetScaleIndex/blob/master/CHANGELOG.md)
     </PackageReleaseNotes>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>

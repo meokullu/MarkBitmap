@@ -505,5 +505,220 @@ namespace MarkBitmap
             //
             return bitmap;
         }
+
+        //
+        private static Color InvertColor(Color color)
+        {
+            //
+            Color newColor = Color.FromArgb(red: 255 - color.R, green: 255 - color.G, blue: 255 - color.B);
+
+            //
+            return newColor;
+        }
+
+        private static Color OppositeGray(Color color)
+        {
+            //
+            byte oppositeGray = (byte)(255 - ((color.R + color.G + color.B) / 3));
+
+            //
+            Color newColor = Color.FromArgb(red: oppositeGray, green: oppositeGray, blue: oppositeGray);
+
+            //
+            return newColor;
+        }
+
+        public static Bitmap MarkAsCameraV2(Bitmap bitmap)
+        {
+            // Checking if bitmap is null.
+            if (bitmap == null)
+            {
+                // Throwing an ArgumentNullException with specified message.
+                throw new ArgumentNullException(messageBitmapNull);
+            }
+
+            //
+            for (int i = 1; i < bitmap.Height - 1; i++)
+            {
+                //
+               // bitmap.SetPixel(0, i, i % 2 == 0 ? Color.Black : Color.White);
+               // bitmap.SetPixel(1, i, i % 2 == 0 ? Color.White : Color.Black);
+
+                //
+               // bitmap.SetPixel(bitmap.Width - 1, i, i % 2 == 0 ? Color.Black : Color.White);
+               // bitmap.SetPixel(bitmap.Width - 2, i, i % 2 == 0 ? Color.White : Color.Black);
+            }
+
+            //
+            for (int i = 1; i < bitmap.Width; i++)
+            {
+                //
+              //  bitmap.SetPixel(i, 0, i % 2 == 0 ? Color.Black : Color.White);
+              //  bitmap.SetPixel(i, 1, i % 2 == 0 ? Color.White : Color.Black);
+
+                //
+               // bitmap.SetPixel(i, bitmap.Height - 1, i % 2 == 0 ? Color.Black : Color.White);
+               // bitmap.SetPixel(i, bitmap.Height - 2, i % 2 == 0 ? Color.White : Color.Black);
+            }
+
+            //
+            for (int i = 0; i < bitmap.Width - 1; i++)
+            {
+                //
+                bitmap.SetPixel(i, i, OppositeGray(bitmap.GetPixel(i, i)));
+                bitmap.SetPixel(i, i + 1, OppositeGray(bitmap.GetPixel(i, i + 1)));
+                bitmap.SetPixel(i + 1, i, OppositeGray(bitmap.GetPixel(i + 1, i)));
+            }
+
+            //
+            for (int i = 1; i < bitmap.Height - 1; i++)
+            {
+                //
+                bitmap.SetPixel(bitmap.Width - i, i, OppositeGray(bitmap.GetPixel(bitmap.Width - 1, i)));
+                bitmap.SetPixel(bitmap.Width - i - 1, i, OppositeGray(bitmap.GetPixel(bitmap.Width - i - 1, i)));
+                bitmap.SetPixel(bitmap.Width - i, i + 1, OppositeGray(bitmap.GetPixel(bitmap.Width - i, i + 1)));
+            }
+
+            //
+            return bitmap;
+        }
+
+        public static Bitmap MarkAsCamera(Bitmap bitmap)
+        {
+            // Checking if bitmap is null.
+            if (bitmap == null)
+            {
+                // Throwing an ArgumentNullException with specified message.
+                throw new ArgumentNullException(messageBitmapNull);
+            }
+
+            //
+            for (int i = 0; i < bitmap.Height; i++)
+            {
+                //
+                bitmap.SetPixel(0, i, OppositeGray(bitmap.GetPixel(0, i)));
+                bitmap.SetPixel(bitmap.Width - 1, i, OppositeGray(bitmap.GetPixel(bitmap.Width - 1, i)));
+            }
+
+            //
+            for (int i = 0; i < bitmap.Width; i++)
+            {
+                //
+                bitmap.SetPixel(i, 0, OppositeGray(bitmap.GetPixel(i, 0)));
+                bitmap.SetPixel(i, bitmap.Height - 1, OppositeGray(bitmap.GetPixel(i, bitmap.Height - 1)));
+            }
+
+            //
+            int quarterWidth = bitmap.Width / 8;
+            int quarterHeight = bitmap.Height / 8;
+
+            //
+            for (int i = 1 * quarterWidth; i < 7 * quarterWidth; i++)
+            {
+                //
+                bitmap.SetPixel(i, 1 * quarterHeight, OppositeGray(bitmap.GetPixel(i, 1 * quarterHeight)));
+                bitmap.SetPixel(i, 7 * quarterHeight, OppositeGray(bitmap.GetPixel(i, 7 * quarterHeight)));
+            }
+
+            //
+            for (int i = 1 * quarterHeight; i < 7 * quarterHeight; i++)
+            {
+                //
+                bitmap.SetPixel(1 * quarterHeight, i, OppositeGray(bitmap.GetPixel(1 * quarterHeight, i)));
+                bitmap.SetPixel(7 * quarterHeight, i, OppositeGray(bitmap.GetPixel(7 * quarterHeight, i)));
+            }
+
+            //
+            for (int i = 3 * quarterWidth; i < 5 * quarterWidth; i++)
+            {
+                //
+                bitmap.SetPixel(i, 3 * quarterHeight, OppositeGray(bitmap.GetPixel(i, 3 * quarterHeight)));
+                bitmap.SetPixel(i, 5 * quarterHeight, OppositeGray(bitmap.GetPixel(i, 5 * quarterHeight)));
+            }
+
+            //
+            for (int i = 3 * quarterHeight; i < 5 * quarterHeight; i++)
+            {
+                //
+                bitmap.SetPixel(3 * quarterHeight, i, OppositeGray(bitmap.GetPixel(3 * quarterHeight, i)));
+                bitmap.SetPixel(5 * quarterHeight, i, OppositeGray(bitmap.GetPixel(5 * quarterHeight, i)));
+            }
+
+            //
+            return bitmap;
+        }
+
+        public static Bitmap MarkMultiGrid(Bitmap bitmap)
+        {
+            // Checking if bitmap is null.
+            if (bitmap == null)
+            {
+                // Throwing an ArgumentNullException with specified message.
+                throw new ArgumentNullException(messageBitmapNull);
+            }
+
+            //
+            for (int i = 1; i < 4; i++)
+            {
+                //
+                for (int j = 0; j < bitmap.Height; j++)
+                {
+                    //
+                    bitmap.SetPixel(bitmap.Width / 4 * i, j, OppositeGray(bitmap.GetPixel((bitmap.Width / 4 * i), j)));
+                }
+            }
+
+            //
+            for (int i = 0; i < 4; i++)
+            {
+                //
+                for (int j = 0; j < bitmap.Width; j++)
+                {
+                    //
+                    bitmap.SetPixel(j, bitmap.Height / 4 * i, OppositeGray(bitmap.GetPixel(j, bitmap.Height / 4 * i)));
+                }
+            }
+
+            //
+            for (int i = 0; i < bitmap.Width - 1; i++)
+            {
+                //
+                bitmap.SetPixel(i, i, OppositeGray(bitmap.GetPixel(i, i)));
+                bitmap.SetPixel(i, i + 1, OppositeGray(bitmap.GetPixel(i, i + 1)));
+                bitmap.SetPixel(i + 1, i, OppositeGray(bitmap.GetPixel(i + 1, i)));
+            }
+
+            //
+            for (int i = 1; i < bitmap.Height - 1; i++)
+            {
+                //
+                bitmap.SetPixel(bitmap.Width - i, i, OppositeGray(bitmap.GetPixel(bitmap.Width - i, i)));
+                bitmap.SetPixel(bitmap.Width - i - 1, i, OppositeGray(bitmap.GetPixel((bitmap.Width - i - 1), i)));
+                bitmap.SetPixel(bitmap.Width - i, i + 1, OppositeGray(bitmap.GetPixel((bitmap.Width - i), i + 1)));
+            }
+
+            //
+            int quarterWidth = bitmap.Width / 8;
+            int quarterHeight = bitmap.Height / 8;
+
+            //
+            for (int i = 3 * quarterWidth; i < quarterWidth * 5; i++)
+            {
+                //
+                bitmap.SetPixel(i, 3 * quarterHeight, OppositeGray(bitmap.GetPixel(i, 3 * quarterHeight)));
+                bitmap.SetPixel(i, 5 * quarterHeight, OppositeGray(bitmap.GetPixel(i, 5 * quarterHeight)));
+            }
+
+            //
+            for (int i = 3 * quarterHeight; i < quarterHeight * 5; i++)
+            {
+                //
+                bitmap.SetPixel(3 * quarterHeight, i, OppositeGray(bitmap.GetPixel(3 * quarterHeight, i)));
+                bitmap.SetPixel(5 * quarterHeight, i, OppositeGray(bitmap.GetPixel(5 * quarterHeight, i)));
+            }
+
+            //
+            return bitmap;
+        }
     }
 }
