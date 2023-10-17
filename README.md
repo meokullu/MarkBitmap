@@ -43,9 +43,8 @@ MarkDiagonallyInverseSafe(Bitmap bitmap, int count, Color color)
 ### Version History
 See changelog [MarkBitmap changelog](https://github.com/meokullu/MarkBitmap/blob/master/CHANGELOG.md)
 
-### Task List
-- [ ] MarkHorizontally, MarkVertically, MarkDiagonally, MarkDiagonally methods.
-- [ ] Fill summaries of methods.
+### Task list
+* Create an issue or check task list: [Issues](https://github.com/meokullu/MarkBitmap/issues)
 
 ### Licence
 [MIT license](https://github.com/meokullu/MarkBitmap/blob/master/LICENSE)
