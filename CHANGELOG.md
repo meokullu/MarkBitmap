@@ -10,14 +10,15 @@
 ### Removed
 -->
 
-## [1.0.0-alpha.x] (Upcoming)
-*
-
 ## [1.0.0-alpha.2]
 
-###
-* Added CHANGELOG
+### Added
+* Added CHANGELOG.
+* Tag on PackageTags.
+
+### Changed
 * Updated README
+* Task List moved to Issues.
 
 ## [1.0.0-alpha.1]
 
