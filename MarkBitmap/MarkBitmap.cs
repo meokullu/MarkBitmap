@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
@@ -10,20 +11,23 @@ namespace MarkBitmap
     public partial class MarkBitmap
     {
         /// <summary>
-        /// Transforming bitmap data into byte array.
+        /// Transforming between Bitmap and byte array.
         /// </summary>
         /// <param name="bitmap">Specified bitmap.</param>
         /// <returns>Byte array whose filled with bitmap's color data.</returns>
         private static byte[] ToBuffer(Bitmap bitmap)
         {
-            // Creating a buffer width length of each pixels and its three component's length.
-            byte[] buffer = new byte[bitmap.Width * bitmap.Height * 3];
-
             // Creating a BitmapData. (ReadOnly)
             BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
 
+            // Getting depth of bitmap.
+            int depth = Image.GetPixelFormatSize(bmpData.PixelFormat) / 8;
+
+            // Creating a buffer width length of each pixels and its three component's length.
+            byte[] buffer = new byte[bmpData.Width * bmpData.Height * depth];
+
             // Coping data from buffer into BitmapData with buffer length.
-            Marshal.Copy(buffer, 0, bmpData.Scan0, buffer.Length);
+            Marshal.Copy(bmpData.Scan0, buffer, 0, buffer.Length);
 
             // Unlocking bitmaps.
             bitmap.UnlockBits(bmpData);
@@ -58,95 +62,143 @@ namespace MarkBitmap
         }
     }
 
+    /// <summary>
+    /// Marking through byte[] to byte[].
+    /// </summary>
     public partial class MarkBitmap
     {
         #region Marking buffer
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. Adds horizontally lines with given count.
         /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="count"></param>
-        /// <param name="height"></param>
-        /// <param name="width"></param>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        public static byte[] MarkHorizontally(byte[] buffer, int count, int height, int width, Color color)
+        /// <param name="buffer">Byte array that holds bitmap image data.</param>
+        /// <param name="count">Number of divides.</param>
+        /// <param name="width">Image width.</param>
+        /// <param name="height">Image height.</param>
+        /// <param name="color">Color will be used as marking line.</param>
+        /// <returns>Byte array after applied changes.</returns>
+        public static byte[] MarkHorizontally(byte[] buffer, int count, int width, int height, Color color)
         {
-            //
-            int dividor = height / count;
+            // Offset blocks to shift.
+            int offset = width * height / count;
 
-            //
-            int offset;
-
-            //
-            for (int i = 1; i < dividor; i++)
+            // Loop for each marking lines.
+            for (int j = 0; j < count; j++)
             {
-                //
-                for (int j = 0; j < width; j++)
+                // Loop for width.
+                for (int i = 0; i < width; i++)
                 {
-                    //
-                    offset = (((i * dividor * width) + j - 1) * 3);
-
-                    //
-                    buffer[offset] = color.B;
-                    buffer[offset + 1] = color.G;
-                    buffer[offset + 2] = color.R;
+                    // Changes value of array with certain index. Instead of RGB, it is BGR which is alphabetically.
+                    buffer[(3 * (offset * j + i) )] = color.B;
+                    buffer[(3 * (offset * j + i)) + 1] = color.G;
+                    buffer[(3 * (offset * j + i) ) + 2] = color.R;
                 }
             }
 
-            //
+            // Returning applied result.
             return buffer;
         }
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. Adds vertically lines with given count.
         /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="count"></param>
-        /// <param name="height"></param>
-        /// <param name="width"></param>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        public static byte[] MarkVertically(byte[] buffer, int count, int height, int width, Color color)
+        /// <param name="buffer">Byte array that holds bitmap image data.</param>
+        /// <param name="count">Number of divides.</param>
+        /// <param name="width">Image width.</param>
+        /// <param name="height">Image height.</param>
+        /// <param name="color">Color will be used as marking line.</param>
+        /// <returns>Byte array after applied changes.</returns>
+        public static byte[] MarkVertically(byte[] buffer, int count, int width, int height, Color color)
         {
-            //
+            // Offset blocks to shift.
+            int offset = width / count;
+
+            // Loop for each marking lines.
+            for (int j = 0; j < count; j++)
+            {
+                // Loop for height.
+                for (int i = 0; i < height; i++)
+                {
+                    // Changes value of array with certain index. Instead of RGB, it is BGR which is alphabetically.
+                    buffer[(3 * (offset * j + width * i))] = color.B;
+                    buffer[(3 * (offset * j + width * i)) + 1] = color.G;
+                    buffer[(3 * (offset * j + width * i)) + 2] = color.R;
+                }
+            }
+
+            // Returning applied result.
             return buffer;
         }
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. Adds diagonal lines with given count.
         /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="count"></param>
-        /// <param name="height"></param>
-        /// <param name="width"></param>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        public static byte[] MarkDiagonally(byte[] buffer, int count, int height, int width, Color color)
+        /// <param name="buffer">Byte array that holds bitmap image data.</param>
+        /// <param name="count">Number of divides.</param>
+        /// <param name="width">Image width.</param>
+        /// <param name="height">Image height.</param>
+        /// <param name="color">Color will be used as marking line.</param>
+        /// <returns>Byte array after applied changes.</returns>
+        public static byte[] MarkDiagonally(byte[] buffer, int count, int width, int height, Color color)
         {
+            // Offset blocks to shift.
+            int offset = 0;
+
+            // Experimental.
             //
+            for (int i = 0; i < width; i++)
+            {
+                //
+                offset = (i * width + i) * 3;
+
+                // Changes value of array with certain index. Instead of RGB, it is BGR which is alphabetically.
+                buffer[offset] = color.B;
+                buffer[offset + 1] = color.G;
+                buffer[offset + 2] = color.R;
+            }
+
+            // Returning applied result.
             return buffer;
         }
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. Adds diagonal inverse lines with given count.
         /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="count"></param>
-        /// <param name="height"></param>
-        /// <param name="width"></param>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        public static byte[] MarkDiagonallyInverse(byte[] buffer, int count, int height, int width, Color color)
+        /// <param name="buffer">Byte array that holds bitmap image data.</param>
+        /// <param name="count">Number of divides.</param>
+        /// <param name="width">Image width.</param>
+        /// <param name="height">Image height.</param>
+        /// <param name="color">Color will be used as marking line.</param>
+        /// <returns>Byte array after applied changes.</returns>
+        public static byte[] MarkDiagonallyInverse(byte[] buffer, int count, int width, int height, Color color)
         {
+            // Offset blocks to shift.
+            int offset = 0;
+
+            // Experimental.
             //
+            for (int i = width; i > 0; i--)
+            {
+                //
+                offset = (i * width - i) * 3;
+
+                // Changes value of array with certain index. Instead of RGB, it is BGR which is alphabetically.
+                buffer[offset] = color.B;
+                buffer[offset + 1] = color.G;
+                buffer[offset + 2] = color.R;
+            }
+
+            // Returning applied result.
             return buffer;
         }
 
         #endregion Marking buffer
     }
 
+    /// <summary>
+    /// Marking through byte[] to byte[].
+    /// </summary>
     [SupportedOSPlatform("windows")]
     public partial class MarkBitmap
     {
@@ -154,13 +206,13 @@ namespace MarkBitmap
         private readonly static string messageBitmapNull = "Bitmap is null";
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. Adds horizontally lines with given count.
         /// </summary>
-        /// <param name="bitmap"></param>
+        /// <param name="bitmap">Specified bitmap.</param>
         /// <param name="count"></param>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <param name="color">Color will be used as marking line.</param>
+        /// <returns>Bitmap with applied changes.</returns>
+        /// <exception cref="ArgumentNullException">Throws exception when bitmap is null.</exception>
         public static Bitmap MarkHorizontally(Bitmap bitmap, int count, Color color)
         {
             // Checking if bitmap is null.
@@ -170,31 +222,49 @@ namespace MarkBitmap
                 throw new ArgumentNullException(messageBitmapNull);
             }
 
-            // TODO: Parse methods.
-            return ToBMP(MarkHorizontally(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
+            // Transform to byte array.
+            byte[] buffer = ToBuffer(bitmap);
+
+            // Process array with marking horizontally.
+            byte[] processedBuffer = MarkHorizontally(buffer: buffer, count: count, width: bitmap.Width, height: bitmap.Height, color: color);
+
+            // Tranforsm to Bitmap image.
+            Bitmap processedBitmap = ToBMP(buffer: processedBuffer, width: bitmap.Width, height: bitmap.Height);
+
+            // Returning applied result.
+            return processedBitmap;
         }
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. [Unsafe] version of MarkHorizontally(). Adds horizontally lines with given count.  
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="count"></param>
-        /// <param name="color"></param>
-        /// <returns></returns>
+        /// <param name="bitmap">Specified bitmap.</param>
+        /// <param name="count">Number of divides.</param>
+        /// <param name="color">Color will be used as marking line.</param>
+        /// <returns>Bitmap with applied changes.</returns>
         public static Bitmap MarkHorizontallyUnsafe(Bitmap bitmap, int count, Color color)
         {
-            // TODO: Parse methods.
-            return ToBMP(MarkHorizontally(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
+            // Transform to byte array.
+            byte[] buffer = ToBuffer(bitmap);
+
+            // Process array with marking horizontally.
+            byte[] processedBuffer = MarkHorizontally(buffer: buffer, count: count, width: bitmap.Width, height: bitmap.Height, color: color);
+
+            // Tranforsm to Bitmap image.
+            Bitmap processedBitmap = ToBMP(buffer: processedBuffer, width: bitmap.Width, height: bitmap.Height);
+
+            // Returning applied result.
+            return processedBitmap;
         }
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. Adds vertically lines with given count.
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="count"></param>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <param name="bitmap">Specified bitmap.</param>
+        /// <param name="count">Number of divides.</param>
+        /// <param name="color">Color will be used as marking line.</param>
+        /// <returns>Bitmap with applied changes.</returns>
+        /// <exception cref="ArgumentNullException">Throws exception when bitmap is null.</exception>
         public static Bitmap MarkVertically(Bitmap bitmap, int count, Color color)
         {
             // Checking if bitmap is null.
@@ -204,31 +274,49 @@ namespace MarkBitmap
                 throw new ArgumentNullException(messageBitmapNull);
             }
 
-            // TODO: Parse methods.
-            return ToBMP(MarkVertically(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
+            // Transform to byte array.
+            byte[] buffer = ToBuffer(bitmap);
+
+            // Process array with marking vertically.
+            byte[] processedBuffer = MarkVertically(buffer: buffer, count: count, width: bitmap.Width, height: bitmap.Height, color: color);
+
+            // Tranforsm to Bitmap image.
+            Bitmap processedBitmap = ToBMP(buffer: processedBuffer, width: bitmap.Width, height: bitmap.Height);
+
+            // Returning applied result.
+            return processedBitmap;
         }
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. [Unsafe] version of MarkVertically(). Adds vertically lines with given count.  
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="count"></param>
-        /// <param name="color"></param>
-        /// <returns></returns>
+        /// <param name="bitmap">Specified bitmap.</param>
+        /// <param name="count">Number of divides.</param>
+        /// <param name="color">Color will be used as marking line.</param>
+        /// <returns>Bitmap with applied changes.</returns>
         public static Bitmap MarkVerticallyUnsafe(Bitmap bitmap, int count, Color color)
         {
-            // TODO: Parse methods.
-            return ToBMP(MarkVertically(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
+            // Transform to byte array.
+            byte[] buffer = ToBuffer(bitmap);
+
+            // Process array with marking vertically.
+            byte[] processedBuffer = MarkVertically(buffer: buffer, count: count, width: bitmap.Width, height: bitmap.Height, color: color);
+
+            // Tranforsm to Bitmap image.
+            Bitmap processedBitmap = ToBMP(buffer: processedBuffer, width: bitmap.Width, height: bitmap.Height);
+
+            // Returning applied result.
+            return processedBitmap;
         }
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. Adds diagonally lines with given count.
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="count"></param>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <param name="bitmap">Specified bitmap.</param>
+        /// <param name="count">Number of divides.</param>
+        /// <param name="color">Color will be used as marking line.</param>
+        /// <returns>Bitmap with applied changes.</returns>
+        /// <exception cref="ArgumentNullException">Throws exception when bitmap is null.</exception>
         public static Bitmap MarkDiagonally(Bitmap bitmap, int count, Color color)
         {
             // Checking if bitmap is null.
@@ -238,31 +326,49 @@ namespace MarkBitmap
                 throw new ArgumentNullException(messageBitmapNull);
             }
 
-            // TODO: Parse methods.
-            return ToBMP(MarkDiagonally(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
+            // Transform to byte array.
+            byte[] buffer = ToBuffer(bitmap);
+
+            // Process array with marking diagonally.
+            byte[] processedBuffer = MarkDiagonally(buffer: buffer, count: count, width: bitmap.Width, height: bitmap.Height, color: color);
+
+            // Tranforsm to Bitmap image.
+            Bitmap processedBitmap = ToBMP(buffer: processedBuffer, width: bitmap.Width, height: bitmap.Height);
+
+            // Returning applied result.
+            return processedBitmap;
         }
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. [Unsafe] version of MarkDiagonally(). Adds vertically lines with given count.  
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="count"></param>
-        /// <param name="color"></param>
-        /// <returns></returns>
+        /// <param name="bitmap">Specified bitmap.</param>
+        /// <param name="count">Number of divides.</param>
+        /// <param name="color">Color will be used as marking line.</param>
+        /// <returns>Bitmap with applied changes.</returns>
         public static Bitmap MarkDiagonallyUnsafe(Bitmap bitmap, int count, Color color)
         {
-            // TODO: Parse methods.
-            return ToBMP(MarkDiagonally(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
+            // Transform to byte array.
+            byte[] buffer = ToBuffer(bitmap);
+
+            // Process array with marking diagonally.
+            byte[] processedBuffer = MarkDiagonally(buffer: buffer, count: count, width: bitmap.Width, height: bitmap.Height, color: color);
+
+            // Tranforsm to Bitmap image.
+            Bitmap processedBitmap = ToBMP(buffer: processedBuffer, width: bitmap.Width, height: bitmap.Height);
+
+            // Returning applied result.
+            return processedBitmap;
         }
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. Adds diagonally inverse lines with given count.
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="count"></param>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <param name="bitmap">Specified bitmap.</param>
+        /// <param name="count">Number of divides.</param>
+        /// <param name="color">Color will be used as marking line.</param>
+        /// <returns>Bitmap with applied changes.</returns>
+        /// <exception cref="ArgumentNullException">Throws exception when bitmap is null.</exception>
         public static Bitmap MarkDiagonallyInverse(Bitmap bitmap, int count, Color color)
         {
             // Checking if bitmap is null.
@@ -272,17 +378,26 @@ namespace MarkBitmap
                 throw new ArgumentNullException(messageBitmapNull);
             }
 
-            // TODO: Parse methods.
-            return ToBMP(MarkDiagonallyInverse(ToBuffer(bitmap), count: count, width: bitmap.Width, height: bitmap.Height, color: color), bitmap.Width, bitmap.Height);
+            // Transform to byte array.
+            byte[] buffer = ToBuffer(bitmap);
+
+            // Process array with marking diagonally inverse.
+            byte[] processedBuffer = MarkDiagonallyInverse(buffer: buffer, count: count, width: bitmap.Width, height: bitmap.Height, color: color);
+
+            // Tranforsm to Bitmap image.
+            Bitmap processedBitmap = ToBMP(buffer: processedBuffer, width: bitmap.Width, height: bitmap.Height);
+
+            // Returning applied result.
+            return processedBitmap;
         }
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. [Unsafe] version of MarkDiagonallyInverse(). Adds diagonally inverse lines with given count.
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="count"></param>
-        /// <param name="color"></param>
-        /// <returns></returns>
+        /// <param name="bitmap">Specified bitmap.</param>
+        /// <param name="count">Number of divides.</param>
+        /// <param name="color">Color will be used as marking line.</param>
+        /// <returns>Bitmap with applied changes.</returns>
         public static Bitmap MarkDiagonallyInverseUnsafe(Bitmap bitmap, int count, Color color)
         {
             // TODO: Parse methods.
@@ -290,19 +405,19 @@ namespace MarkBitmap
         }
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. Adds eight armed cross lines with given count.
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="divideCountHeight"></param>
-        /// <param name="divideCountWidth"></param>
-        /// <param name="divideCountDiagonal"></param>
-        /// <param name="divideCountDiagonalInverse"></param>
-        /// <param name="colorHeight"></param>
-        /// <param name="colorWidth"></param>
-        /// <param name="colorDiagonal"></param>
-        /// <param name="colorDiagonalInverse"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <param name="bitmap">Specified bitmap.</param>
+        /// <param name="divideCountHeight">Number of divides.</param>
+        /// <param name="divideCountWidth">Number of divides.</param>
+        /// <param name="divideCountDiagonal">Number of divides.</param>
+        /// <param name="divideCountDiagonalInverse">Number of divides.</param>
+        /// <param name="colorHeight">Color will be used as marking line vertically.</param>
+        /// <param name="colorWidth">Color will be used as marking line horizontally.</param>
+        /// <param name="colorDiagonal">Color will be used as marking line diagonally.</param>
+        /// <param name="colorDiagonalInverse">Color will be used as marking diagonally inverse.</param>
+        /// <returns>Bitmap with applied changes.</returns>
+        /// <exception cref="ArgumentNullException">Throws exception when bitmap is null.</exception>
         public static Bitmap MarkEightArmedCross(Bitmap bitmap, int divideCountHeight, int divideCountWidth, int divideCountDiagonal, int divideCountDiagonalInverse, Color colorHeight, Color colorWidth, Color colorDiagonal, Color colorDiagonalInverse)
         {
             // Checking if bitmap is null.
@@ -312,198 +427,63 @@ namespace MarkBitmap
                 throw new ArgumentNullException(messageBitmapNull);
             }
 
-            //
+            // Transform to byte array.
             byte[] buffer = ToBuffer(bitmap);
 
-            //
+            // Process array with marking horizontally.
             byte[] horizontallyMarked = MarkHorizontally(buffer, count: divideCountHeight, width: bitmap.Width, height: bitmap.Height, color: colorWidth);
 
-            //
+            // Process array with marking vertically.
             byte[] verticallyMarked = MarkVertically(horizontallyMarked, count: divideCountWidth, width: bitmap.Width, height: bitmap.Height, color: colorHeight);
 
-            //
+            // Process array with marking diagonally.
             byte[] diagonallyMarked = MarkDiagonally(verticallyMarked, count: divideCountDiagonal, width: bitmap.Width, height: bitmap.Height, color: colorDiagonal);
 
-            //
+            // Process array with marking diagonally inverse.
             byte[] diagonallyInverseMarked = MarkDiagonallyInverse(diagonallyMarked, count: divideCountDiagonalInverse, width: bitmap.Width, height: bitmap.Height, color: colorDiagonalInverse);
 
-            //
-            var bmp = ToBMP(diagonallyInverseMarked, width: bitmap.Width, height: bitmap.Height);
+            // Tranforsm to Bitmap image.
+            Bitmap processedBitmap = ToBMP(diagonallyInverseMarked, width: bitmap.Width, height: bitmap.Height);
 
-            //
-            return bmp;
+            // Returning applied result.
+            return processedBitmap;
         }
 
         /// <summary>
-        /// Do not use.
+        /// Do not use. [Unsafe] version of MarkEightArmesCross(). Adds eight armed cross lines with given count.
         /// </summary>
-        /// <param name="bitmap"></param>
-        /// <param name="divideCountHeight"></param>
-        /// <param name="divideCountWidth"></param>
-        /// <param name="divideCountDiagonal"></param>
-        /// <param name="divideCountDiagonalInverse"></param>
-        /// <param name="colorHeight"></param>
-        /// <param name="colorWidth"></param>
-        /// <param name="colorDiagonal"></param>
-        /// <param name="colorDiagonalInverse"></param>
-        /// <returns></returns>
+        /// <param name="bitmap">Specified bitmap.</param>
+        /// <param name="divideCountHeight">Number of divides.</param>
+        /// <param name="divideCountWidth">Number of divides.</param>
+        /// <param name="divideCountDiagonal">Number of divides.</param>
+        /// <param name="divideCountDiagonalInverse">Number of divides.</param>
+        /// <param name="colorHeight">Color will be used as marking line vertically.</param>
+        /// <param name="colorWidth">Color will be used as marking line horizontally.</param>
+        /// <param name="colorDiagonal">Color will be used as marking line diagonally.</param>
+        /// <param name="colorDiagonalInverse">Color will be used as marking line diagonally inverse.</param>
+        /// <returns>Bitmap with applied changes.</returns>
         public static Bitmap MarkEightArmedCrossUnsafe(Bitmap bitmap, int divideCountHeight, int divideCountWidth, int divideCountDiagonal, int divideCountDiagonalInverse, Color colorHeight, Color colorWidth, Color colorDiagonal, Color colorDiagonalInverse)
         {
-            //
+            // Transform to byte array.
             byte[] buffer = ToBuffer(bitmap);
 
-            //
+            // Process array with marking horizontally.
             byte[] horizontallyMarked = MarkHorizontally(buffer, count: divideCountHeight, width: bitmap.Width, height: bitmap.Height, color: colorWidth);
 
-            //
+            // Process array with marking vertically.
             byte[] verticallyMarked = MarkVertically(horizontallyMarked, count: divideCountWidth, width: bitmap.Width, height: bitmap.Height, color: colorHeight);
 
-            //
+            // Process array with marking diagonally.
             byte[] diagonallyMarked = MarkDiagonally(verticallyMarked, count: divideCountDiagonal, width: bitmap.Width, height: bitmap.Height, color: colorDiagonal);
 
-            //
+            // Process array with marking diagonally inverse.
             byte[] diagonallyInverseMarked = MarkDiagonallyInverse(diagonallyMarked, count: divideCountDiagonalInverse, width: bitmap.Width, height: bitmap.Height, color: colorDiagonalInverse);
 
-            //
-            Bitmap bmp = ToBMP(diagonallyInverseMarked, width: bitmap.Width, height: bitmap.Height);
+            // Tranforsm to Bitmap image.
+            Bitmap processedBitmap = ToBMP(diagonallyInverseMarked, width: bitmap.Width, height: bitmap.Height);
 
-            //
-            return bmp;
-        }
-    }
-
-    public partial class MarkBitmap
-    {
-        /// <summary>
-        /// Do not use.
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="customScaling"></param>
-        /// <param name="width"></param>
-        public static void MarkBuffer(byte[] buffer, int customScaling, int width)
-        {
-            //
-            for (int i = 0; i < width * customScaling; i++)
-            {
-                //buffer[i * 3 + 0] = 0;
-                //buffer[i * 3 + 1] = 0;
-                //buffer[i * 3 + 2] = 255;
-
-                //buffer[i * 3 + 3] = 0;
-                //buffer[i * 3 + 4] = 0;
-                //buffer[i * 3 + 5] = 255;
-
-                //buffer[(customScaling * GenWidth * i * 3) + 0] = 255;
-                //buffer[(customScaling * GenWidth * i * 3) + 1] = 0;
-                //buffer[(customScaling * GenWidth * i * 3) + 2] = 0;
-
-                //buffer[(customScaling * GenWidth * i * 3) + 3] = 255;
-                //buffer[(customScaling * GenWidth * i * 3) + 4] = 0;
-                //buffer[(customScaling * GenWidth * i * 3) + 5] = 0;
-
-                //buffer[(customScaling * width * i * 3) + i * 3 - 3] = 0;
-                //buffer[(customScaling * width * i * 3) + i * 3 - 2] = 0;
-                //buffer[(customScaling * width * i * 3) + i * 3 - 1] = 255;
-
-                //buffer[(customScaling * width * i * 3) + i * 3 + 0] = ((byte)((byte)i % 2 == 0 ? 0 : 255));
-                //buffer[(customScaling * width * i * 3) + i * 3 + 1] = ((byte)((byte)i % 2 == 0 ? 255 : 0));
-                //buffer[(customScaling * width * i * 3) + i * 3 + 2] = ((byte)((byte)i % 2 == 0 ? 0 : 255));
-
-                //buffer[(customScaling * width * i * 3) + i * 3 + 3] = 255;
-                //buffer[(customScaling * width * i * 3) + i * 3 + 4] = 0;
-                //buffer[(customScaling * width * i * 3) + i * 3 + 5] = 0;
-
-                buffer[customScaling * width * i + customScaling * i * 3 + 0] = 255;
-                buffer[customScaling * width * i + customScaling * i * 3 + 1] = 255;
-                buffer[customScaling * width * i + customScaling * i * 3 + 2] = 255;
-
-                //buffer[(customScaling * GenWidth * i * 3) + i * 3 + 0] = 0;
-                //buffer[(customScaling * GenWidth * i * 3) + i * 3 + 1] = 255;
-                //buffer[(customScaling * GenWidth * i * 3) + i * 3 + 2] = 0;
-
-                //buffer[(customScaling * GenWidth * i * 3) + i * 3 + 3] = 0;
-                //buffer[(customScaling * GenWidth * i * 3) + i * 3 + 4] = 255;
-                //buffer[(customScaling * GenWidth * i * 3) + i * 3 + 5] = 0;
-            }
-        }
-
-        /// <summary>
-        /// Do not use.
-        /// </summary>
-        /// <param name="bitmap"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">Throws if bitmap is null.</exception>
-        public static Bitmap MarkBitmapInternal(Bitmap bitmap)
-        {
-            // Checking if bitmap is null.
-            if (bitmap == null)
-            {
-                // Throwing an ArgumentNullException with specified message.
-                throw new ArgumentNullException(messageBitmapNull);
-            }
-
-            //
-            for (int i = 1; i < 4; i++)
-            {
-                //
-                for (int j = 0; j < bitmap.Height; j++)
-                {
-                    //
-                    bitmap.SetPixel(bitmap.Width / 4 * i, j, Color.White);
-                }
-            }
-
-            //
-            for (int i = 0; i < 4; i++)
-            {
-                //
-                for (int j = 0; j < bitmap.Width; j++)
-                {
-                    //
-                    bitmap.SetPixel(j, bitmap.Height / 4 * i, Color.White);
-                }
-            }
-
-            //
-            for (int i = 0; i < bitmap.Width - 1; i++)
-            {
-                //
-                bitmap.SetPixel(i, i, Color.White);
-                bitmap.SetPixel(i, i + 1, Color.White);
-                bitmap.SetPixel(i + 1, i, Color.White);
-            }
-
-            //
-            for (int i = 1; i < bitmap.Height - 1; i++)
-            {
-                //
-                bitmap.SetPixel(bitmap.Width - i, i, Color.White);
-                bitmap.SetPixel(bitmap.Width - i - 1, i, Color.White);
-                bitmap.SetPixel(bitmap.Width - i, i + 1, Color.White);
-            }
-
-            //
-            int quarterWidth = bitmap.Width / 8;
-            int quarterHeight = bitmap.Height / 8;
-
-            //
-            for (int i = 3 * quarterWidth; i < quarterWidth * 5; i++)
-            {
-                //
-                bitmap.SetPixel(i, 3 * quarterHeight, Color.White);
-                bitmap.SetPixel(i, 5 * quarterHeight, Color.White);
-            }
-
-            //
-            for (int i = 3 * quarterHeight; i < quarterHeight * 5; i++)
-            {
-                //
-                bitmap.SetPixel(3 * quarterHeight, i, Color.White);
-                bitmap.SetPixel(5 * quarterHeight, i, Color.White);
-            }
-
-            //
-            return bitmap;
+            // Returning applied result.
+            return processedBitmap;
         }
     }
 }
