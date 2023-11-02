@@ -1,4 +1,5 @@
 ## MarkBitmap
+[![MarkBitmap](https://img.shields.io/nuget/v/MarkBitmap.svg)](https://www.nuget.org/packages/MarkBitmap/) [![MarkBitmap](https://img.shields.io/nuget/dt/MarkBitmap.svg)](https://www.nuget.org/packages/MarkBitmap/) [![License](https://img.shields.io/github/license/meokullu/MarkBitmap.svg)](https://github.com/meokullu/MarkBitmap/blob/master/LICENSE)
 
 MarkBitmap is a package to mark the bitmap images with geometric shapes.
 
@@ -51,10 +52,13 @@ See changelog [MarkBitmap changelog](https://github.com/meokullu/MarkBitmap/blob
 * Create an issue or check task list: [Issues](https://github.com/meokullu/MarkBitmap/issues)
 
 ### Licence
-[MIT license](https://github.com/meokullu/MarkBitmap/blob/master/LICENSE)
+This repository is licensed under the "MIT" license. See [MIT license](https://github.com/meokullu/MarkBitmap/blob/master/LICENSE).
 
-### Authors
-Twitter: Enes Okullu [@enesokullu](https://twitter.com/EnesOkullu)
+### Authors & Contributing
+
+If you'd like to contribute, then contribute. <!-- [contributing guide](CONTRIBUTING.md). -->
+
+[![Contributors](https://contrib.rocks/image?repo=meokullu/MarkBitmap)](https://github.com/meokullu/MarkBitmap/graphs/contributors)
 
 ### Help
 Twitter: Enes Okullu [@enesokullu](https://twitter.com/EnesOkullu)
