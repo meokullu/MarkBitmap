@@ -90,9 +90,9 @@ namespace MarkBitmap
                 for (int i = 0; i < width; i++)
                 {
                     // Changes value of array with certain index. Instead of RGB, it is BGR which is alphabetically.
-                    buffer[(3 * (offset * j + i) )] = color.B;
+                    buffer[(3 * (offset * j + i))] = color.B;
                     buffer[(3 * (offset * j + i)) + 1] = color.G;
-                    buffer[(3 * (offset * j + i) ) + 2] = color.R;
+                    buffer[(3 * (offset * j + i)) + 2] = color.R;
                 }
             }
 
@@ -483,6 +483,56 @@ namespace MarkBitmap
             Bitmap processedBitmap = ToBMP(diagonallyInverseMarked, width: bitmap.Width, height: bitmap.Height);
 
             // Returning applied result.
+            return processedBitmap;
+        }
+    }
+
+    /// <summary>
+    /// Extra markings.
+    /// </summary>
+    public partial class MarkBitmap
+    {
+        public static Bitmap MarkWithCameraGrid(Bitmap bitmap)
+        {
+            //
+            Color color = Color.Black;
+
+            // Checking if bitmap is null.
+            if (bitmap == null)
+            {
+                // Throwing an ArgumentNullException with specified message.
+                throw new ArgumentNullException(messageBitmapNull);
+            }
+
+            // Transform to byte array.
+            byte[] buffer = ToBuffer(bitmap);
+
+            ////
+            //int quarterOfWidth = bitmap.Width / 4;
+            //int quarterOfHeight = bitmap.Height / 4;
+
+            //
+            int offsetFirst = bitmap.Width * bitmap.Height / 4;
+            int offsetSecond = bitmap.Width * bitmap.Height * 3 / 4;
+
+            //
+            int offset = offsetSecond;
+
+            //
+            for (int i = 0; i < bitmap.Width / 2; i++)
+            {
+                offset = offsetFirst + i;
+
+                //
+                buffer[(3 * offset) + 0] = color.B;
+                buffer[(3 * offset) + 1] = color.G;
+                buffer[(3 * offset) + 2] = color.R;
+            }
+
+            // Tranform to Bitmap image.
+            Bitmap processedBitmap = ToBMP(buffer: buffer, width: bitmap.Width, height: bitmap.Height);
+
+            //
             return processedBitmap;
         }
     }
