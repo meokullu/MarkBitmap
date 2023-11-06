@@ -11,6 +11,12 @@
 #### Removed
 -->
 
+### [1.0.0-alpha.4]
+
+#### Changed
+* New design README.
+* New design CHANGELOG.
+
 ### [1.0.0-alpha.3]
 
 ### Added

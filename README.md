@@ -56,7 +56,7 @@ This repository is licensed under the "MIT" license. See [MIT license](https://g
 
 ### Authors & Contributing
 
-If you'd like to contribute, then contribute. <!-- [contributing guide](CONTRIBUTING.md). -->
+If you'd like to contribute, then contribute. [contributing guide](https://github.com/meokullu/MarkBitmap/blob/master/CONTRIBUTING.md).
 
 [![Contributors](https://contrib.rocks/image?repo=meokullu/MarkBitmap)](https://github.com/meokullu/MarkBitmap/graphs/contributors)
 
