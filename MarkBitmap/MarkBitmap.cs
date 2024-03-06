@@ -7,7 +7,6 @@ using System.Runtime.Versioning;
 
 namespace MarkBitmap
 {
-    [SupportedOSPlatform("windows")]
     public partial class MarkBitmap
     {
         /// <summary>
@@ -146,7 +145,6 @@ namespace MarkBitmap
             int offset = 0;
 
             // Experimental.
-            //
             for (int i = 0; i < width; i++)
             {
                 //
@@ -199,11 +197,13 @@ namespace MarkBitmap
     /// <summary>
     /// Marking through byte[] to byte[].
     /// </summary>
+#if NET6_0_OR_GREATER
     [SupportedOSPlatform("windows")]
+#endif
     public partial class MarkBitmap
     {
         // Default null message if bitmap is not specified.
-        private readonly static string messageBitmapNull = "Bitmap is null";
+        private static readonly string s_messageBitmapNull = "Bitmap is null";
 
         /// <summary>
         /// Do not use. Adds horizontally lines with given count.
@@ -219,7 +219,7 @@ namespace MarkBitmap
             if (bitmap == null)
             {
                 // Throwing an ArgumentNullException with specified message.
-                throw new ArgumentNullException(messageBitmapNull);
+                throw new ArgumentNullException(s_messageBitmapNull);
             }
 
             // Transform to byte array.
@@ -271,7 +271,7 @@ namespace MarkBitmap
             if (bitmap == null)
             {
                 // Throwing an ArgumentNullException with specified message.
-                throw new ArgumentNullException(messageBitmapNull);
+                throw new ArgumentNullException(s_messageBitmapNull);
             }
 
             // Transform to byte array.
@@ -323,7 +323,7 @@ namespace MarkBitmap
             if (bitmap == null)
             {
                 // Throwing an ArgumentNullException with specified message.
-                throw new ArgumentNullException(messageBitmapNull);
+                throw new ArgumentNullException(s_messageBitmapNull);
             }
 
             // Transform to byte array.
@@ -375,7 +375,7 @@ namespace MarkBitmap
             if (bitmap == null)
             {
                 // Throwing an ArgumentNullException with specified message.
-                throw new ArgumentNullException(messageBitmapNull);
+                throw new ArgumentNullException(s_messageBitmapNull);
             }
 
             // Transform to byte array.
@@ -424,7 +424,7 @@ namespace MarkBitmap
             if (bitmap == null)
             {
                 // Throwing an ArgumentNullException with specified message.
-                throw new ArgumentNullException(messageBitmapNull);
+                throw new ArgumentNullException(s_messageBitmapNull);
             }
 
             // Transform to byte array.
@@ -501,7 +501,7 @@ namespace MarkBitmap
             if (bitmap == null)
             {
                 // Throwing an ArgumentNullException with specified message.
-                throw new ArgumentNullException(messageBitmapNull);
+                throw new ArgumentNullException(s_messageBitmapNull);
             }
 
             // Transform to byte array.
