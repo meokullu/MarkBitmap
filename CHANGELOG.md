@@ -11,6 +11,11 @@
 #### Removed
 -->
 
+### [1.0.0-alpha.5]
+
+#### Added
+* Multi-framework support for net7.0; net461; netstandard2.0
+
 ### [1.0.0-alpha.4]
 
 #### Changed
