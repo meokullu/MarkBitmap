@@ -11,6 +11,21 @@
 #### Removed
 -->
 
+### [1.0.0-alpha.6]
+
+### Added
+* `MarkHorizontalLine(byte[] buffer, int x, int y, int width, int length, Color color)` method added under BufferMarking.cs
+* `MarkVerticalLine(byte[] buffer, int x, int y, int width, int length, Color color)` method added under BufferMarking.cs
+* `MarkCorners(byte[] buffer, int width, int height, int length, Color color)` method added under BufferMarking.cs
+* `MarkCorners(Bitmap bitmap, int length, Color color)` method is added.
+* `MarkCameraGrid(Bitmap bitmap, Color color)` method is added
+
+### Changed
+* BitmapMarking.cs, BufferMarking.cs, Convertion.cs files are added. Related methods were moved into certain files.
+
+### Removed
+* `MarkWithCameraGrid(Bitmap bitmap)` method is removed. `MarkCameraGrid(Bitmap bitmap)` is alternative method.
+
 ### [1.0.0-alpha.5]
 
 #### Added
