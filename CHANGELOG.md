@@ -11,6 +11,11 @@
 #### Removed
 -->
 
+### [1.0.0-alpha.7]
+
+### Fixed
+* `MarkVerticalLine(byte[] buffer, int x, int y, int width, int length, Color color)` was throwing an error. It is fixed with this version.
+
 ### [1.0.0-alpha.6]
 
 ### Added
