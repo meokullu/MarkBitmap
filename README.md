@@ -5,7 +5,7 @@ MarkBitmap is a package to mark the bitmap images with geometric shapes.
 
 > :warning: Alpha version. Experimantal only. Do not use.
 
-![MarkBitmap](https://repository-images.githubusercontent.com/699370948/461829ee-3302-4060-b620-6b04285cc71e)
+![MarkBitmap](https://github.com/meokullu/MarkBitmap/assets/4971757/2302bcf5-0fa9-4f09-a456-18aaac32624c)
 
 [Download on NuGet gallery](https://www.nuget.org/packages/MarkBitmap/)
 
