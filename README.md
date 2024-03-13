@@ -1,7 +1,7 @@
 ## MarkBitmap
 [![MarkBitmap](https://img.shields.io/nuget/v/MarkBitmap.svg)](https://www.nuget.org/packages/MarkBitmap/) [![MarkBitmap](https://img.shields.io/nuget/dt/MarkBitmap.svg)](https://www.nuget.org/packages/MarkBitmap/) [![License](https://img.shields.io/github/license/meokullu/MarkBitmap.svg)](https://github.com/meokullu/MarkBitmap/blob/master/LICENSE)
 
-MarkBitmap is a package to mark the bitmap images with geometric shapes.
+MarkBitmap is a project to mark the bitmap images with geometric shapes.
 
 > :warning: Alpha version. Experimantal only. Do not use.
 
@@ -19,30 +19,36 @@ MarkBitmap will consist different geometric shaped and more to mark bitmap files
 
 ### byte[] to byte[]
 ```
-MarkHorizontally(Bitmap bitmap, int count, Color color)
+MarkHorizontally(Bitmap bitmap, int count, Color color);
 ```
 ```
-MarkVertically(Bitmap bitmap, int count, Color color)
+MarkVertically(Bitmap bitmap, int count, Color color);
 ```
 ```
-MarkDiagonally(Bitmap bitmap, int count, Color color)
+MarkDiagonally(Bitmap bitmap, int count, Color color);
 ```
 ```
-MarkDiagonallyInverse(Bitmap bitmap, int count, Color color)
+MarkDiagonallyInverse(Bitmap bitmap, int count, Color color);
+```
+```
+MarkCorners(Bitmap bitmap, int length, Color color);
+```
+```
+MarkCameraGrid(Bitmap bitmap, Color color); // Applied on social preview above.
 ```
 
 ### byte[] to byte[] Safe
 ```
-MarkHorizontallySafe(Bitmap bitmap, int count, Color color)
+MarkHorizontallySafe(Bitmap bitmap, int count, Color color);
 ```
 ```
-MarkVerticallySafe(Bitmap bitmap, int count, Color color)
+MarkVerticallySafe(Bitmap bitmap, int count, Color color);
 ```
 ```
-MarkDiagonallySafe(Bitmap bitmap, int count, Color color)
+MarkDiagonallySafe(Bitmap bitmap, int count, Color color);
 ```
 ```
-MarkDiagonallyInverseSafe(Bitmap bitmap, int count, Color color)
+MarkDiagonallyInverseSafe(Bitmap bitmap, int count, Color color);
 ```
 
 ### Version History
