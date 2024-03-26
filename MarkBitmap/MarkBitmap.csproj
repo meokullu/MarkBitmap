@@ -5,23 +5,15 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Marking Bitmap images with different geometric shapes.</Title>
-    <Version>1.0.0-alpha.7</Version>
+    <Version>1.0.0-alpha.8</Version>
     <Authors>Enes Okullu</Authors>
     <Company>Enes Okullu</Company>
     <Description>MarkBitmap offers multiple geometric shape applier.</Description>
     <Copyright>Enes Okullu</Copyright>
     <PackageTags>Mark; Marking; Bitmap; Image; Buffer;</PackageTags>
     <PackageReleaseNotes>
-      v1.0.0-alpha.7
-      * MarkHorizontalLine(byte[] buffer, int x, int y, int width, int length, Color color) method added under BufferMarking.cs
-      * MarkVerticalLine(byte[] buffer, int x, int y, int width, int length, Color color) method added under BufferMarking.cs
-      * MarkCorners(byte[] buffer, int width, int height, int length, Color color) method added under BufferMarking.cs
-      * MarkCorners(Bitmap bitmap, int length, Color color) method is added.
-      * MarkCameraGrid(Bitmap bitmap, Color color) method is added.      
-      * BitmapMarking.cs, BufferMarking.cs, Convertion.cs files are added. Related methods were moved into certain files.
-      * MarkWithCameraGrid(Bitmap bitmap) method is removed. MarkCameraGrid(Bitmap bitmap) is alternative method.
-      Hotfix with -alpha.7
-      * MarkVerticalLine() method was throwing an error.
+      v1.0.0-alpha.8
+      
       See changelog (https://github.com/meokullu/MarkBitmap/blob/master/CHANGELOG.md)
     </PackageReleaseNotes>
     <AssemblyVersion>1.0.0</AssemblyVersion>

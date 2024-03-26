@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MarkBitmap
 {
@@ -81,7 +76,7 @@ namespace MarkBitmap
             for (int i = 0; i < width; i++)
             {
                 //
-                offset = (i * width + i) * 3;
+                offset = ((i * width) + i) * 3;
 
                 // Changes value of array with certain index. Instead of RGB, it is BGR which is alphabetically.
                 buffer[offset] = color.B;
@@ -112,7 +107,7 @@ namespace MarkBitmap
             for (int i = width; i > 0; i--)
             {
                 //
-                offset = (i * width - i) * 3;
+                offset = ((i * width) - i) * 3;
 
                 // Changes value of array with certain index. Instead of RGB, it is BGR which is alphabetically.
                 buffer[offset] = color.B;
