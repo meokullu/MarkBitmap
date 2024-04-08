@@ -1,3 +1,4 @@
+﻿using System;
 using System.Drawing;
 
 namespace MarkBitmap
@@ -7,6 +8,31 @@ namespace MarkBitmap
     /// </summary>
     public partial class MarkBitmap
     {
+        public static void SetColorOnArray(byte[] buffer, int index, Color color)
+        {
+            // Changes value of array with certain index. Instead of RGB, it is BGR which is alphabetically.
+            buffer[index + 0] = color.B;
+            buffer[index + 1] = color.G;
+            buffer[index + 2] = color.R;
+        }
+
+        public static void SetColorOnArray(byte[] buffer, int index, Func<byte, byte, byte, Color> colorFunc)
+        {
+            if (colorFunc == null)
+            {
+                throw new ArgumentNullException("colorFunc is null");
+            }
+
+            SetColorOnArray(buffer, index, colorFunc(buffer[index], buffer[index + 1], buffer[index + 2]));
+        }
+
+        public static Color ColorFuncDefault(byte red, byte green, byte blue)
+        {
+            byte avarage = (byte)((255 - red + 255 - green + 255 - blue) / 3);
+
+            return Color.FromArgb(avarage, avarage, avarage);
+        }
+
         #region Marking buffer
 
         /// <summary>
@@ -21,13 +47,13 @@ namespace MarkBitmap
         public static byte[] MarkHorizontally(byte[] buffer, int count, int width, int height, Color color)
         {
             // Offset blocks to shift.
-            int offset = width * height / count;
+            int offset = width / count;
 
             // Loop for each marking lines.
             for (int i = 1; i < count; i++)
             {
                 // Calling via inner method.
-                buffer = MarkHorizontalLine(buffer: buffer, x: offset * i, y: 0, width: width, length: width, color: color);
+                buffer = MarkHorizontalLine(buffer: buffer, x: offset * i, y: 0, width: width, length: width - 1, color: color);
             }
 
             // Returning applied result.
@@ -46,12 +72,12 @@ namespace MarkBitmap
         public static byte[] MarkVertically(byte[] buffer, int count, int width, int height, Color color)
         {
             // Offset blocks to shift.
-            int offset = width / count;
+            int offset = height / count;
 
             for (int i = 1; i < count; i++)
             {
                 // Calling via inner method.
-                buffer = MarkVerticalLine(buffer, x: 0, y: offset * i, width: width, length: height, color: color);
+                buffer = MarkVerticalLine(buffer: buffer, x: 0, y: offset * i, width: width, length: height - 1, color: color);
             }
 
             // Returning applied result.
@@ -79,9 +105,7 @@ namespace MarkBitmap
                 offset = ((i * width) + i) * 3;
 
                 // Changes value of array with certain index. Instead of RGB, it is BGR which is alphabetically.
-                buffer[offset] = color.B;
-                buffer[offset + 1] = color.G;
-                buffer[offset + 2] = color.R;
+                SetColorOnArray(buffer, offset, color);
             }
 
             // Returning applied result.
@@ -109,27 +133,26 @@ namespace MarkBitmap
                 //
                 offset = ((i * width) - i) * 3;
 
-                // Changes value of array with certain index. Instead of RGB, it is BGR which is alphabetically.
-                buffer[offset] = color.B;
-                buffer[offset + 1] = color.G;
-                buffer[offset + 2] = color.R;
+                SetColorOnArray(buffer, offset, color);
             }
 
             // Returning applied result.
             return buffer;
         }
 
+        #region Lines
+
         public static byte[] MarkHorizontalLine(byte[] buffer, int x, int y, int width, int length, Color color)
         {
             //
-            int widthBlock = y * width;
-
-            //
             for (int i = 0; i < length; i++)
             {
-                buffer[(widthBlock + i + x) * 3] = color.B;
-                buffer[(widthBlock + i + x) * 3 + 1] = color.G;
-                buffer[(widthBlock + i + x) * 3 + 2] = color.R;
+                int index = ((y * width) + i + x) * 3;
+
+                //Debug.WriteLine($"MarkHorizontalLine => x: {x}, y: {y} l: {length}");
+
+                //SetColorOnArray(markedBuffer, index, ColorFuncDefault);
+                SetColorOnArray(buffer, index, color);
             }
 
             //
@@ -138,20 +161,53 @@ namespace MarkBitmap
 
         public static byte[] MarkVerticalLine(byte[] buffer, int x, int y, int width, int length, Color color)
         {
-            //
-            int widthBlock = y * width;
 
             //
             for (int i = 0; i < length; i++)
             {
-                buffer[(x + (i * width) + (widthBlock)) * 3] = color.B;
-                buffer[(x + (i * width) + (widthBlock)) * 3 + 1] = color.G;
-                buffer[(x + (i * width) + (widthBlock)) * 3 + 2] = color.R;
+                int index = (((i + y) * width) + x) * 3;
+
+                //Debug.WriteLine($"MarkVerticalLine => x: {x}, y: {y} l: {length}");
+
+                //SetColorOnArray(markedBuffer, index, ColorFuncDefault);
+                SetColorOnArray(buffer, index, color);
             }
 
             //
             return buffer;
         }
+
+        public static byte[] MarkDiagonalLine(byte[] buffer, int x, int y, int width, int length, Color color)
+        {
+            //
+            for (int i = 0; i < length; i++)
+            {
+                int index = (((i + y) * width) + i + x) * 3;
+
+                //SetColorOnArray(markedBuffer, index, ColorFuncDefault);
+                SetColorOnArray(buffer, index, color);
+            }
+
+            //
+            return buffer;
+        }
+
+        public static byte[] MarkDiagonalInverseLine(byte[] buffer, int x, int y, int width, int length, Color color)
+        {
+            //
+            for (int i = 0; i < length; i++)
+            {
+                int index = (((y + i) * width) - i + x) * 3;
+
+                //SetColorOnArray(markedBuffer, index, ColorFuncDefault);
+                SetColorOnArray(buffer, index, color);
+            }
+
+            //
+            return buffer;
+        }
+
+        #endregion Lines
 
         public static byte[] MarkCorners(byte[] buffer, int width, int height, int length, Color color)
         {
@@ -160,16 +216,16 @@ namespace MarkBitmap
             buffer = MarkVerticalLine(buffer: buffer, x: 0, y: 0, width: width, length: length, color: color);
 
             // Bottom left
-            buffer = MarkHorizontalLine(buffer: buffer, x: 0, y: height - 1, width: width, length: length, color: color);
-            buffer = MarkVerticalLine(buffer: buffer, x: 0, y: height - length, width: width, length: length, color: color);
+            buffer = MarkHorizontalLine(buffer: buffer, x: 0, y: height - 1, width: width, length: length - 1, color: color);
+            buffer = MarkVerticalLine(buffer: buffer, x: 0, y: height - length + 1, width: width, length: length - 1, color: color);
 
             // Top right
-            buffer = MarkHorizontalLine(buffer: buffer, width - length, 0, width, length, color);
-            buffer = MarkVerticalLine(buffer: buffer, width - 1, 0, width, length, color);
+            buffer = MarkHorizontalLine(buffer: buffer, x: width - length + 1, y: 0, width, length, color);
+            buffer = MarkVerticalLine(buffer: buffer, x: width - 1, y: 0, width, length, color);
 
-            // Top bottom
-            buffer = MarkHorizontalLine(buffer: buffer, width - length, height - 1, width, length, color);
-            buffer = MarkVerticalLine(buffer: buffer, width - 1, height - 1 - length, width, length, color);
+            // Bottom right
+            buffer = MarkHorizontalLine(buffer: buffer, x: width - length + 1, y: height - 1, width, length - 1, color);
+            buffer = MarkVerticalLine(buffer: buffer, x: width - 1, y: height - length + 1, width, length - 1, color);
 
             //
             return buffer;

@@ -12,6 +12,19 @@
 -->
 
 ### [1.0.0-alpha.8]
+#### Added
+* SetColorOnArray(byte[] buffer, int index, Color color) method is added.
+* SetColorOnArray(byte[] buffer, int index, Func<byte, byte, byte, Color> colorFunc) method is added.
+* Color ColorFuncDefault(byte red, byte green, byte blue) method is added.
+* MarkTargetGrid() method is added.
+
+#### Changed
+* MarkHorizontally(byte[] buffer) offset is changed with `width`/`count` instead of `width*height`/`count` due to direct coordinate access on method. Length on `MarkHorizontalLine()` now `width` minus one instead of `width`'s size itself.
+* On MarkVertically(byte[] buffer) method, `length` on `MarkVerticalLine()` now `height` minus one instead of `height`'s size itself.
+* MarkHorizontalLine() method now access to coordinate directly.
+* MarkVerticalLine() method now access to coordinate directly.
+* MarkCameraGrid() now draws full length horizontal and vertical lines.* 
+
 
 ### [1.0.0-alpha.7]
 ### Fixed
