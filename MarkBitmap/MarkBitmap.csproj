@@ -12,8 +12,10 @@
     <Copyright>Enes Okullu</Copyright>
     <PackageTags>Mark; Marking; Bitmap; Image; Buffer;</PackageTags>
     <PackageReleaseNotes>
-      v1.0.0-alpha.8
-      
+      v1.0.0-alpha.9
+      MarkHorizontalLine(), MarkVerticalLine() and MarkTargetCenterGrid() methods are added.
+      MarkCorners() draws correct length and position at corners now.
+      MarkTargetGrid() draws longet length of lines now.
       See changelog (https://github.com/meokullu/MarkBitmap/blob/master/CHANGELOG.md)
     </PackageReleaseNotes>
     <AssemblyVersion>1.0.0</AssemblyVersion>

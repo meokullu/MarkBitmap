@@ -82,8 +82,8 @@ namespace MarkBitmap
             #region Center grid
 
             //
-            int lengthX = bitmap.Width / 6;
-            int lengthY = bitmap.Height / 6;
+            int lengthX = bitmap.Width / 4;
+            int lengthY = bitmap.Height / 4;
 
             //
             int x = (bitmap.Width / 2) - (lengthX / 2);
@@ -153,7 +153,7 @@ namespace MarkBitmap
             #region Center grid
 
             //
-            int length = bitmap.Width > bitmap.Height ? bitmap.Height / 6 : bitmap.Width / 6;
+            int length = bitmap.Width > bitmap.Height ? bitmap.Height / 4 : bitmap.Width / 4;
 
             //
             int x = (bitmap.Width / 2) - (length / 2);
@@ -179,6 +179,57 @@ namespace MarkBitmap
             buffer = MarkDiagonalInverseLine(buffer, xOffset, y, bitmap.Width, length, color);
 
             #endregion Diags
+
+            // Create marked bitmap.
+            Bitmap markedBitmap = ToBMP(buffer, bitmap.Width, bitmap.Height);
+
+            // Returning bitmap.
+            return markedBitmap;
+        }
+
+        public static Bitmap MarkTargetCenterGrid(Bitmap bitmap, Func<byte, byte, byte, Color> colorFunc)
+        {
+            // Checking if bitmap is null.
+            if (bitmap == null)
+            {
+                // Throwing an ArgumentNullException with specified message.
+                throw new ArgumentNullException($"null {bitmap}");
+            }
+
+            // Transform to byte array.
+            byte[] buffer = ToBuffer(bitmap);
+
+            #region Corners
+
+            //
+            buffer = MarkCorners(buffer, bitmap.Width, bitmap.Height, bitmap.Width > bitmap.Height ? bitmap.Height / 4 : bitmap.Width / 4, Color.Yellow);
+
+            #region Center grid
+
+            //
+            int length = bitmap.Width > bitmap.Height ? bitmap.Height / 4 : bitmap.Width / 4;
+
+            #endregion Corners
+
+            //
+            int x = (bitmap.Width / 2) - (length / 2);
+            int y = (bitmap.Height / 2) - (length / 2);
+
+            //
+            int xOffset = x + length;
+            int yOffset = y + length;
+
+            //
+            buffer = MarkVerticalLine(buffer, x, y, bitmap.Width, length, colorFunc);
+            buffer = MarkVerticalLine(buffer, xOffset, y, bitmap.Width, length, colorFunc);
+
+            //
+            buffer = MarkHorizontalLine(buffer, x, y, bitmap.Width, length, colorFunc);
+            buffer = MarkHorizontalLine(buffer, x, yOffset, bitmap.Width, length, colorFunc);
+
+            #endregion Center grid
+
+            buffer = MarkVerticalLine(buffer, bitmap.Height / 2, yOffset, bitmap.Width, 20, colorFunc);
 
             // Create marked bitmap.
             Bitmap markedBitmap = ToBMP(buffer, bitmap.Width, bitmap.Height);
