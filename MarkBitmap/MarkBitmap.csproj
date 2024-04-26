@@ -5,7 +5,7 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Marking Bitmap images with different geometric shapes.</Title>
-    <Version>1.0.0-alpha.8</Version>
+    <Version>1.0.0-alpha.9</Version>
     <Authors>Enes Okullu</Authors>
     <Company>Enes Okullu</Company>
     <Description>MarkBitmap offers multiple geometric shape applier.</Description>
