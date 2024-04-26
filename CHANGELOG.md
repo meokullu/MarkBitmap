@@ -11,6 +11,16 @@
 #### Removed
 -->
 
+### [1.0.0-alpha.9]
+#### Added
+* `MarkHorizontalLine(byte[] buffer, int x, int y, int width, int length, Func<byte, byte, byte, Color> colorFunc)` method is added.
+* `MarkVerticalLine(byte[] buffer, int x, int y, int width, int length, Func<byte, byte, byte, Color> colorFunc)` method is added.
+* `MarkTargetCenterGrid(Bitmap bitmap, Func<byte, byte, byte, Color> colorFunc)` method is added.
+
+#### Changed
+* `MarkCorners(byte[] buffer, int width, int height, int length, Color color)` method drawing parameter changed due to wrong position of corners and their lengths.
+* `MarkTargetGrid(Bitmap bitmap, Color color)` method now draws longer lines. (l/6 to l/4)
+
 ### [1.0.0-alpha.8]
 #### Added
 * SetColorOnArray(byte[] buffer, int index, Color color) method is added.

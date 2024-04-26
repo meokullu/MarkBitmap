@@ -159,9 +159,25 @@ namespace MarkBitmap
             return buffer;
         }
 
+        public static byte[] MarkHorizontalLine(byte[] buffer, int x, int y, int width, int length, Func<byte, byte, byte, Color> colorFunc)
+        {
+            //
+            for (int i = 0; i < length; i++)
+            {
+                int index = ((y * width) + i + x) * 3;
+
+                //Debug.WriteLine($"MarkHorizontalLine => x: {x}, y: {y} l: {length}");
+
+                //SetColorOnArray(markedBuffer, index, ColorFuncDefault);
+                SetColorOnArray(buffer, index, colorFunc);
+            }
+
+            //
+            return buffer;
+        }
+
         public static byte[] MarkVerticalLine(byte[] buffer, int x, int y, int width, int length, Color color)
         {
-
             //
             for (int i = 0; i < length; i++)
             {
@@ -171,6 +187,23 @@ namespace MarkBitmap
 
                 //SetColorOnArray(markedBuffer, index, ColorFuncDefault);
                 SetColorOnArray(buffer, index, color);
+            }
+
+            //
+            return buffer;
+        }
+
+        public static byte[] MarkVerticalLine(byte[] buffer, int x, int y, int width, int length, Func<byte, byte, byte, Color> colorFunc)
+        {
+            //
+            for (int i = 0; i < length; i++)
+            {
+                int index = (((i + y) * width) + x) * 3;
+
+                //Debug.WriteLine($"MarkVerticalLine => x: {x}, y: {y} l: {length}");
+
+                //SetColorOnArray(markedBuffer, index, ColorFuncDefault);
+                SetColorOnArray(buffer, index, colorFunc);
             }
 
             //
@@ -216,16 +249,16 @@ namespace MarkBitmap
             buffer = MarkVerticalLine(buffer: buffer, x: 0, y: 0, width: width, length: length, color: color);
 
             // Bottom left
-            buffer = MarkHorizontalLine(buffer: buffer, x: 0, y: height - 1, width: width, length: length - 1, color: color);
-            buffer = MarkVerticalLine(buffer: buffer, x: 0, y: height - length + 1, width: width, length: length - 1, color: color);
+            buffer = MarkHorizontalLine(buffer: buffer, x: 0, y: height - 1, width: width, length: length, color: color);
+            buffer = MarkVerticalLine(buffer: buffer, x: 0, y: height - length, width: width, length: length, color: color);
 
             // Top right
-            buffer = MarkHorizontalLine(buffer: buffer, x: width - length + 1, y: 0, width, length, color);
+            buffer = MarkHorizontalLine(buffer: buffer, x: width - length, y: 0, width, length, color);
             buffer = MarkVerticalLine(buffer: buffer, x: width - 1, y: 0, width, length, color);
 
             // Bottom right
-            buffer = MarkHorizontalLine(buffer: buffer, x: width - length + 1, y: height - 1, width, length - 1, color);
-            buffer = MarkVerticalLine(buffer: buffer, x: width - 1, y: height - length + 1, width, length - 1, color);
+            buffer = MarkHorizontalLine(buffer: buffer, x: width - length, y: height - 1, width, length, color);
+            buffer = MarkVerticalLine(buffer: buffer, x: width - 1, y: height - length, width, length, color);
 
             //
             return buffer;
